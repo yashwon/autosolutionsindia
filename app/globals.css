@@ -1,0 +1,589 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════════
+   DESIGN SYSTEM TOKENS
+═══════════════════════════════════════════════════════════════ */
+@theme {
+  --font-sans:   var(--font-inter);
+  --font-serif:  var(--font-playfair);
+
+  --color-background:    #000000;
+  --color-foreground:    #ffffff;
+  --color-muted:         rgba(255, 255, 255, 0.40);
+  --color-accent:        #8ba8d4;       /* muted steel blue */
+  --color-accent-warm:   #c4a882;       /* editorial warm gold */
+  --color-surface:       rgba(255, 255, 255, 0.03);
+  --color-border:        rgba(255, 255, 255, 0.08);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BASE RESET
+═══════════════════════════════════════════════════════════════ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: auto; /* Lenis takes over */
+}
+
+body {
+  background-color: #000;
+  color: #fff;
+  overflow-x: hidden;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LENIS SMOOTH SCROLL
+═══════════════════════════════════════════════════════════════ */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TEXT SELECTION
+═══════════════════════════════════════════════════════════════ */
+::selection {
+  background: rgba(139, 168, 212, 0.22);
+  color: #fff;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   NOISE GRAIN OVERLAY  (ultra-subtle cinematic film grain)
+═══════════════════════════════════════════════════════════════ */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 192px 192px;
+  will-change: opacity;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   HERO STRUCTURAL LAYOUT
+═══════════════════════════════════════════════════════════════ */
+
+/* Sticky viewport that holds all hero UI */
+.hero-sticky {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 10;
+  overflow: visible;   /* Corner HUD must not clip */
+}
+
+/* ── Atmospheric vignette ────────────────────────────────────── */
+/* Radial gradient: centre open → edges darkened.
+   Draws the eye inward, prevents canvas bleed into UI. */
+.hero-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background:
+    radial-gradient(
+      ellipse 80% 70% at 50% 50%,
+      transparent 20%,
+      rgba(0,0,0,0.28) 65%,
+      rgba(0,0,0,0.55) 100%
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(0,0,0,0.22) 0%,
+      transparent 18%,
+      transparent 75%,
+      rgba(0,0,0,0.30) 100%
+    );
+}
+
+/* ── Editorial edge rules ────────────────────────────────────── */
+/* Single-pixel horizontal lines at top/bottom — print editorial feel */
+.hero-edge-rule {
+  position: absolute;
+  left: 2.5rem;
+  right: 2.5rem;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.07);
+  pointer-events: none;
+  z-index: 11;
+}
+
+.hero-edge-rule--top    { top: 3.75rem; }
+.hero-edge-rule--bottom { bottom: 3.75rem; }
+
+/* ═══════════════════════════════════════════════════════════════
+   TYPOGRAPHY HIERARCHY
+═══════════════════════════════════════════════════════════════ */
+
+/* ── Eyebrow label ───────────────────────────────────────────── */
+.hero-eyebrow {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: clamp(0.575rem, 0.75vw, 0.675rem);
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--color-accent);  /* steel blue */
+  line-height: 1;
+}
+
+/* ── Headline ────────────────────────────────────────────────── */
+/*
+  clamp: 2.25rem → 4.5vw → 5.5rem
+  This keeps all three lines within 100vh even at narrow widths.
+  Tighter letter-spacing (-0.035em) reads as editorial / high-end.
+*/
+.hero-headline {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: clamp(2.5rem, 5.2vw, 6.25rem);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+  color: #fff;
+  margin-bottom: 1.35rem;
+}
+
+.hero-headline-em {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: #8c8c8c; /* premium ash gray perfectly matched to user's image */
+}
+
+/* Per-line reveal masks */
+.hero-line-mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em; /* prevent descender clip */
+}
+
+.hero-desktop-break {
+  display: none;
+}
+
+.hero-line-inner {
+  display: block;
+  will-change: transform, opacity;
+}
+
+/* ── Sub-copy ────────────────────────────────────────────────── */
+.hero-sub {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: clamp(0.775rem, 1vw, 0.9rem);
+  font-weight: 400;
+  line-height: 1.85;
+  letter-spacing: 0.015em;
+  color: rgba(255, 255, 255, 0.45);
+  max-width: 24rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CENTRE CONTENT BLOCK
+═══════════════════════════════════════════════════════════════ */
+.hero-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 2rem;
+  z-index: 12;
+}
+
+/* ── Meta divider row ────────────────────────────────────────── */
+.hero-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-bottom: 1.1rem;
+}
+
+/* Horizontal rule flanking the label */
+.hero-rule {
+  width: 1.75rem;
+  height: 1px;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PREMIUM GLASS CTA
+   Restrained atmospheric glass — no heavy blur, no neon glow.
+═══════════════════════════════════════════════════════════════ */
+.glass-cta {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.85rem 2rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 255, 255, 0.12),
+    0 4px 24px -6px rgba(0, 0, 0, 0.4);
+
+  /* Restrained blur — cleaner and more atmospheric */
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Inner top-left sheen — adds depth without glow */
+.glass-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    138deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    transparent 50%
+  );
+  pointer-events: none;
+}
+
+/* Hover: marginally brighter — intentional restraint */
+.glass-cta:hover {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
+  border-color: rgba(255, 255, 255, 0.22);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 255, 255, 0.20),
+    0 8px 32px -8px rgba(0, 0, 0, 0.5);
+}
+
+/* Arrow icon */
+.cta-arrow {
+  display: inline-flex;
+  position: relative;
+  z-index: 1;
+  transition: transform 0.38s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.glass-cta:hover .cta-arrow {
+  transform: translate(3px, -3px);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   HEADER NAVBAR
+═══════════════════════════════════════════════════════════════ */
+.hero-navbar {
+  position: absolute;
+  top: 1.75rem;
+  /* Centre without transform so GSAP y-animation doesn't break it */
+  left: 0;
+  right: 0;
+  margin-inline: auto;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  z-index: 100;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  white-space: nowrap;
+}
+
+.navbar-link {
+  font-size: 0.825rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  transition: color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  letter-spacing: 0.02em;
+}
+
+.navbar-link:hover {
+  color: #fff;
+}
+
+.navbar-logo {
+  font-size: 1.05rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  color: #fff;
+  text-transform: uppercase;
+  user-select: none;
+  margin: 0 0.75rem;
+}
+
+.navbar-button {
+  font-size: 0.825rem;
+  font-weight: 400;
+  color: #fff;
+  text-decoration: none;
+  padding: 0.42rem 1.2rem;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  letter-spacing: 0.02em;
+  background: transparent;
+}
+
+.navbar-button:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: #fff;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BOTTOM CONTROLS (Sound Toggle & Progress Indicator)
+═══════════════════════════════════════════════════════════════ */
+.sound-toggle-btn {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 3rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #000000;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 13;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease;
+}
+
+.sound-toggle-btn:hover {
+  transform: scale(1.08);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.sound-toggle-btn svg {
+  display: block;
+}
+
+.bottom-slider-indicator {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 34px;
+  height: 8px;
+  border-radius: 999px;
+  border: 1.2px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 13;
+}
+
+.slider-indicator-dot {
+  width: 4px;
+  height: 4px;
+  background: #ffffff;
+  border-radius: 50%;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   WILL-CHANGE PERFORMANCE HINTS
+═══════════════════════════════════════════════════════════════ */
+.hero-headline,
+.hero-navbar,
+.bottom-slider-indicator {
+  will-change: transform, opacity;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE  (≤ 640px mobile)
+═══════════════════════════════════════════════════════════════ */
+@media (max-width: 640px) {
+  /* Headline: tighter clamp for mobile portrait */
+  .hero-headline {
+    font-size: clamp(2rem, 8.5vw, 3.25rem);
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+  }
+
+  .hero-navbar {
+    top: 1.75rem;
+    gap: 1.25rem;
+  }
+
+  .navbar-link {
+    font-size: 0.725rem;
+  }
+
+  .navbar-logo {
+    font-size: 0.9rem;
+    margin: 0;
+  }
+
+  .navbar-button {
+    font-size: 0.725rem;
+    padding: 0.35rem 0.9rem;
+  }
+
+  .sound-toggle-btn {
+    left: 1.5rem;
+    bottom: 1.75rem;
+    width: 32px;
+    height: 32px;
+  }
+
+  .bottom-slider-indicator {
+    bottom: 1.75rem;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE  (≥ 1024px desktop)
+═══════════════════════════════════════════════════════════════ */
+@media (min-width: 1024px) {
+  .hero-headline {
+    font-size: clamp(3.2rem, 6.5vw, 7.8rem);
+    line-height: 1.03;
+    letter-spacing: -0.04em;
+    margin-bottom: 1.35rem;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CLIP-PATH REVEAL UTILITY
+   (JS sets initial clip, GSAP animates it)
+═══════════════════════════════════════════════════════════════ */
+.clip-reveal {
+  clip-path: inset(0 0 100% 0);
+  will-change: clip-path, opacity, transform;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   WORD MASK  (per-word reveal alternative)
+═══════════════════════════════════════════════════════════════ */
+.word-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.word-mask > span {
+  display: inline-block;
+  will-change: transform;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SCROLL OVERLAY — cinematic text sections
+   All overlays are position:fixed, rendered above the canvas.
+   Glass card panels match the reference site's aesthetic.
+═══════════════════════════════════════════════════════════════ */
+
+/* Glassmorphic project / team card */
+.scroll-glass-card {
+  border-radius: 28px;
+  padding: 1px;
+  background: rgba(160, 160, 160, 0.06);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow:
+    0 8px 32px 0 rgba(0, 0, 0, 0.28),
+    0 0 0 1px rgba(255, 255, 255, 0.13);
+  will-change: transform, opacity;
+  contain: layout style;
+  transform: translateZ(0);
+}
+
+.scroll-glass-card__inner {
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.01);
+  padding: 3vh 2.8vw 2.5vh;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6vh;
+  box-sizing: border-box;
+  height: 100%;
+}
+
+/* Banner pulse animation used by project cards in reference */
+.banner-pulse {
+  animation: bannerPulse 3s ease-in-out infinite;
+}
+
+.banner-no-pulse {
+  animation: none;
+}
+
+@keyframes bannerPulse {
+  0%, 100% { box-shadow: 0 8px 32px 0 rgba(0,0,0,0.28), 0 0 0 1px rgba(255,255,255,0.13); }
+  50%       { box-shadow: 0 8px 40px 4px rgba(0,0,0,0.36), 0 0 0 1px rgba(255,255,255,0.22); }
+}
+
+/* Stat blocks */
+.stat-title {
+  font-family: var(--font-inter), var(--font-archivo), sans-serif;
+  font-weight: 800;
+  font-size: clamp(1.8rem, 4.4vw, 5.2rem);
+  line-height: 1.087;
+  color: #fff;
+  text-shadow: 0px 4px 24px rgba(0,0,0,0.5), 0px 1px 6px rgba(0,0,0,0.35);
+}
+
+.stat-sub {
+  font-family: var(--font-inter), var(--font-archivo), sans-serif;
+  font-weight: 400;
+  font-size: clamp(0.9rem, 2vw, 2.2rem);
+  line-height: 1.087;
+  color: #fff;
+  margin-top: 0.5vh;
+}
+
+/* Booking section iframe container */
+.cal-embed-wrapper {
+  width: 1040px;
+  height: 490px;
+  overflow: hidden;
+  position: relative;
+  border-radius: 8px;
+  transform: scale(0.75);
+  transform-origin: top center;
+}
+
+/* Footer text */
+.scroll-footer-text {
+  font-family: var(--font-inter), var(--font-archivo), sans-serif;
+  font-weight: 400;
+  font-size: clamp(0.7rem, 1.46vw, 1.4rem);
+  color: rgba(255, 255, 255, 0.4);
+  text-align: center;
+  margin: 0;
+  line-height: 1.6;
+}
