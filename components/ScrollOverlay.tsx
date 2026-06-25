@@ -259,7 +259,7 @@ export default function ScrollOverlay({ onOpenBooking }: { onOpenBooking: () => 
   };
 
   return (
-    <div aria-hidden className="fixed inset-0 pointer-events-none" style={{ zIndex: 3 }}>
+    <div className="fixed inset-0" style={{ zIndex: 3, pointerEvents: "none" }}>
 
       {/* 2 ── You don't have it ────────────────────────────────────────── */}
       {f >= R.youDontHave.s && f <= R.youDontHave.e && (
@@ -1014,6 +1014,7 @@ export default function ScrollOverlay({ onOpenBooking }: { onOpenBooking: () => 
           /* Outer div: position + decoration only */
           <div
             key={member.name}
+            data-lenis-prevent
             style={{
               ...outerPos,
               padding: 1,
@@ -1105,6 +1106,11 @@ export default function ScrollOverlay({ onOpenBooking }: { onOpenBooking: () => 
                 href={member.socialUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                data-lenis-prevent="true"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  window.open(member.socialUrl, '_blank');
+                }}
                 style={{
                   marginTop: isMobile ? "3vw" : "auto",
                   fontFamily: FA,
@@ -1116,8 +1122,11 @@ export default function ScrollOverlay({ onOpenBooking }: { onOpenBooking: () => 
                   textDecoration: "none",
                   cursor: "pointer",
                   display: "inline-block",
+                  padding: "10px 0",
                   transition: "text-decoration 0.2s ease",
                   pointerEvents: "auto",
+                  position: "relative",
+                  zIndex: 50,
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.textDecoration = "underline";
