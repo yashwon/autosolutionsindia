@@ -1030,6 +1030,7 @@ export default function ScrollOverlay({ onOpenBooking }: { onOpenBooking: () => 
               flexDirection: "column",
               gap: "1vh",
               boxSizing: "border-box",
+              pointerEvents: "auto",
               ...gStyle(op),
             }}>
               <div style={{
@@ -1105,19 +1106,17 @@ export default function ScrollOverlay({ onOpenBooking }: { onOpenBooking: () => 
                   fontSize: isMobile
                     ? "clamp(0.7rem, 3vw, 0.9rem)"
                     : "clamp(0.75rem, 1.2vw, 1.2rem)",
-                  color: "#38bdf8",
+                  color: "#fff",
                   textDecoration: "none",
                   cursor: "pointer",
                   display: "inline-block",
-                  transition: "color 0.2s ease, text-decoration 0.2s ease",
+                  transition: "text-decoration 0.2s ease",
                   pointerEvents: "auto",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.color = "#0ea5e9";
                   e.currentTarget.style.textDecoration = "underline";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.color = "#38bdf8";
                   e.currentTarget.style.textDecoration = "none";
                 }}
               >
