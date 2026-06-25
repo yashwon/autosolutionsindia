@@ -329,28 +329,34 @@ export default function ScrollOverlay({ onOpenBooking }: { onOpenBooking: () => 
         };
 
         if (isMobile) {
-          /* Mobile: stack both halves centered */
+          /* Mobile: split layout — first paragraph top-left, second bottom-right */
           return (
-            <div style={{
-              position: "fixed",
-              left: "50%",
-              top: "50%",
-              transform: "translate(-50%, -50%)",
-              width: "calc(100vw - 32px)",
-              textAlign: "center",
-              pointerEvents: "none",
-              display: "flex",
-              flexDirection: "column",
-              gap: "1.8rem",
-              ...gStyle(op),
-            }}>
-              <div style={baseText}>
+            <>
+              <div style={{
+                ...baseText,
+                position: "fixed",
+                left: "4vw",
+                top: "16vh",
+                textAlign: "left",
+                width: "calc(100vw - 32px)",
+                pointerEvents: "none",
+                ...gStyle(op),
+              }}>
                 We go into your<br />business, find out exactly
               </div>
-              <div style={baseText}>
+              <div style={{
+                ...baseText,
+                position: "fixed",
+                right: "4vw",
+                bottom: "16vh",
+                textAlign: "right",
+                width: "calc(100vw - 32px)",
+                pointerEvents: "none",
+                ...gStyle(op),
+              }}>
                 what&apos;s pulling you<br />away from growth.
               </div>
-            </div>
+            </>
           );
         }
 
