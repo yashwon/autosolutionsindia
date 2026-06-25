@@ -1015,7 +1015,7 @@ export default function ScrollOverlay({ onOpenBooking }: { onOpenBooking: () => 
               backdropFilter: "blur(8px)",
               WebkitBackdropFilter: "blur(8px)",
               boxShadow: "0 8px 32px 0 rgba(0,0,0,0.27),0 0 0 1px rgba(255,255,255,0.15)",
-              pointerEvents: "none",
+              pointerEvents: "auto",
               zIndex: 20,
             }}
           >
@@ -1094,17 +1094,35 @@ export default function ScrollOverlay({ onOpenBooking }: { onOpenBooking: () => 
                   </div>
                 ))}
               </div>
-              <div style={{
-                marginTop: isMobile ? "3vw" : "auto",
-                fontFamily: FA,
-                fontWeight: 400,
-                fontSize: isMobile
-                  ? "clamp(0.7rem, 3vw, 0.9rem)"
-                  : "clamp(0.75rem, 1.2vw, 1.2rem)",
-                color: "#fff",
-              }}>
+              <a
+                href={member.socialUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  marginTop: isMobile ? "3vw" : "auto",
+                  fontFamily: FA,
+                  fontWeight: 400,
+                  fontSize: isMobile
+                    ? "clamp(0.7rem, 3vw, 0.9rem)"
+                    : "clamp(0.75rem, 1.2vw, 1.2rem)",
+                  color: "#38bdf8",
+                  textDecoration: "none",
+                  cursor: "pointer",
+                  display: "inline-block",
+                  transition: "color 0.2s ease, text-decoration 0.2s ease",
+                  pointerEvents: "auto",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = "#0ea5e9";
+                  e.currentTarget.style.textDecoration = "underline";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = "#38bdf8";
+                  e.currentTarget.style.textDecoration = "none";
+                }}
+              >
                 {member.socialLabel}
-              </div>
+              </a>
             </div>
           </div>
         );

@@ -24,8 +24,8 @@ export async function POST(request: NextRequest) {
         name,
         email,
         phone,
-        business_type: business_type || null,
-        message: message || null,
+        business_type: business_type || "",
+        message: message || "",
       },
     ]);
 

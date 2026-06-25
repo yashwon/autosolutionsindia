@@ -133,7 +133,7 @@ export default function FrameSequence({
       {/* Optional: Simple loading indicator if frames are still downloading */}
       {loadedCount < Math.min(frameCount, 100) && (
         <div className="absolute inset-0 flex items-center justify-center text-white/30 text-sm z-50">
-          Loading Cinematic Experience {Math.round((loadedCount / Math.min(frameCount, 100)) * 100)}%
+          Loading {Math.round((loadedCount / Math.min(frameCount, 100)) * 100)}%
         </div>
       )}
     </div>
