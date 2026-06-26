@@ -95,6 +95,7 @@ html.lenis body {
   height: 100vh;
   z-index: 10;
   overflow: visible;   /* Corner HUD must not clip */
+  pointer-events: none;
 }
 
 /* ── Atmospheric vignette ────────────────────────────────────── */
@@ -215,6 +216,7 @@ html.lenis body {
   text-align: center;
   padding: 0 2rem;
   z-index: 12;
+  pointer-events: none;
 }
 
 /* ── Meta divider row ────────────────────────────────────────── */
