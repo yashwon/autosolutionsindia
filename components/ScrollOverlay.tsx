@@ -38,12 +38,12 @@ const PROJECTS = [
   },
   {
     id: "ai-receptionist",
-    title: "Website with\nSKS",
+    title: "EasyPG",
     description:
-      "We create modern business websites with SKS-focused execution: strong structure, clean design, smooth user experience, and conversion-focused content. The goal is to make every website look professional and help the business get more enquiries.",
+      "EasyPG automates hostel management by handling resident records, monthly fee calculations, billing, and daily operations in one place. It reduces manual work, saves time, minimizes errors, and helps hostel owners manage their business more efficiently.",
     detail:
-      "Includes landing pages, business websites, responsive layouts, service sections, contact forms, and clear call-to-action design.",
-    detailLabel: "Website features:",
+      "Includes resident management, automated monthly billing, fee tracking, payment records, occupancy management, and a simple dashboard for hostel owners.",
+    detailLabel: "EasyPG features:",
     link: null,
     linkLabel: null,
   },
@@ -218,7 +218,7 @@ export default function ScrollOverlay({ onOpenBooking }: { onOpenBooking: () => 
       window.removeEventListener("scroll", onScroll);
       if (raf.current) cancelAnimationFrame(raf.current);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const f = frame;
@@ -1206,7 +1206,7 @@ export default function ScrollOverlay({ onOpenBooking }: { onOpenBooking: () => 
             lineHeight: 1.2,
           }}>
             Eliminate 30 hours of wasted work<br />
-            Book your <em style={{fontFamily: FS}}>free</em> call now
+            Book your <em style={{ fontFamily: FS }}>free</em> call now
           </h2>
           <button
             type="button"
